@@ -27,7 +27,7 @@ def portscan(tgtHost, tgtPorts):
         return
     try:
         tgtName = gethostbyaddr(tgtIP)
-        print('\n[+] scan results for:' + tgtName[0])
+        print('\n[+] scan results for :' + tgtName[0])
     except:
         print('\n[+] scan result for :' + tgtIP)
 
