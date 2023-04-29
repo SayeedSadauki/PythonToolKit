@@ -22,11 +22,10 @@ def portscan(tgtHost, tgtPorts):
     except:
         print('\n[+] scan result for :' + tgtIP)
 
-setdefaulttimeout(10)
-for tgtPort in tgtPorts:
-    print('Scanning port' + str(tgtport))
-
-connScan(tgtHost,int(tgtPort))
+    setdefaulttimeout(10)
+    for tgtPort in tgtPorts:
+        print('Scanning port' + str(tgtPort))
+        connScan(tgtHost,int(tgtPort))
 
     
 
@@ -34,13 +33,14 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description='This is an advanced Port Scanner')
 
     p.add_argument('-H', '--tgtHost', type=str, help='specify target host')
-    p.add_argument('-p', '--tgtPorts', type=int, help='specify target port')
+    p.add_argument('-p', '--tgtPorts', nargs='+', type=int, help='specify target port(s) separated by space')
+
 
     args= p.parse_args()
 
     tgtHost= args.tgtHost
     tgtPorts= args.tgtPorts
-    portscan(tgtHost, tgtPorts)
     if not (tgtHost and tgtPorts):
         p.print_help()
         exit(0)
+portscan(tgtHost, tgtPorts)
