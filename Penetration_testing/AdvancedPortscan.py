@@ -1,18 +1,24 @@
 import argparse
 from socket import *
+from threading import *
 
+screenLock = Semaphore(value=1)
 def connScan(tgtHost, tgtPort):
     try:
         cskt = socket(AF_INET, SOCK_STREAM)
         cskt.connect((tgtHost, tgtPort))
         cskt.send('Hello there may i connect\r\n'.encode())
         results = cskt.recv(1024).decode()
+        screenLock.acquire()
         print('[+] {}:{} open\n{}'.format(tgtHost, tgtPort, results))
         print('[+] %d/tcp open' %tgtPort)
-        cskt.close()
+        
     except:
+        screenLock.acquire()
         print('[-] %d/tCP connection closed' %tgtPort)
-
+    finally:
+        screenLock.release()
+        cskt.close()
 def portscan(tgtHost, tgtPorts):
     try:
         tgtIP = gethostbyname(tgtHost)
@@ -27,8 +33,8 @@ def portscan(tgtHost, tgtPorts):
 
     setdefaulttimeout(10)
     for tgtPort in tgtPorts:
-        print('Scanning port' + str(tgtPort))
-        connScan(tgtHost,int(tgtPort))
+        t = Thread(target=connScan, args=(tgtHost, int(tgtPort)))
+        t.start()
 
     
 
