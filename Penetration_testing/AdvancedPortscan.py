@@ -5,6 +5,9 @@ def connScan(tgtHost, tgtPort):
     try:
         cskt = socket(AF_INET, SOCK_STREAM)
         cskt.connect((tgtHost, tgtPort))
+        cskt.send('Hello there may i connect\r\n'.encode())
+        results = cskt.recv(1024).decode()
+        print('[+] {}:{} open\n{}'.format(tgtHost, tgtPort, results))
         print('[+] %d/tcp open' %tgtPort)
         cskt.close()
     except:
