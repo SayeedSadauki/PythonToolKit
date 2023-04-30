@@ -9,8 +9,8 @@ def send_command(child, cmd):
 
 def connect(user, host, password):
     ssh_newkey = 'Are you sure you want to continue connecting'
-    connstr= 'ssh' + user +'@' + host
-    child = pexpect.spawn(connstr)
+    connstr= 'ssh ' + user +'@' + host
+    child = pexpect.spawn(connstr, timeout=10)
     ret = child.expect([pexpect.TIMEOUT, ssh_newkey, '[P|p]assword:'])
     if ret == 0:
        print('[-] Error Connecting')
